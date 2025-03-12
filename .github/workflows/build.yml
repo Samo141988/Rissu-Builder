@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'android-4.14-stable'
+        default: '4.14.302-sus'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -69,8 +69,8 @@ jobs:
         export CROSS_COMPILE="$(pwd)/toolchains/google/bin/aarch64-linux-android-"
         export CLANG_TRIPLE=aarch64-linux-gnu-
 
-        export KBUILD_BUILD_USER="rsuntk"
-        export KBUILD_BUILD_HOST="rsuntkOrgs"
+        export KBUILD_BUILD_USER="4.14.302-sus"
+        export KBUILD_BUILD_HOST="4.14.302-sus"
         export BUILD_START=`date`
         export SELINUX_STATE="Enforcing"
         export IS_CI=true
