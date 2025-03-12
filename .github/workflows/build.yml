@@ -4,11 +4,11 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'ASB-296_SUSFS_NXT'
+        default: 'F22-susfs-296'
         required: true
       DEFCONFIG: 
         description: Defconfig
-        default: 'rsuntk_defconfig'
+        default: 'f22_defconfig'
         required: false
       LTO:
         description: 'Link Time Optimisation'
@@ -76,9 +76,9 @@ jobs:
         export IS_CI=true
         export LTO="${{ github.event.inputs.LTO }}"
         export DEFCONFIG="${{ github.event.inputs.DEFCONFIG }}"
-        export DEVICE="M325FV"
-        export DEVICE_ID="M32"
-        export TARGET_PRODUCT="m32"
+        export DEVICE="E225F"
+        export DEVICE_ID="f22"
+        export TARGET_PRODUCT="f22ins"
         export KERNELSU="${{ github.event.inputs.KSU }}"
         
         bash $(pwd)/build.sh kernel --jobs $(nproc --all) `echo $DEFCONFIG`
