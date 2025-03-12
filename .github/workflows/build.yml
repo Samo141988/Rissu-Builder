@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: '4.14.302-sus'
+        default: 'ASB-296_SUSFS_NXT'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: "Samo141988/android_kernel_samsung_m32"
+        repository: "Samo141988/kernel_m32"
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
         fetch-depth: 1
@@ -69,8 +69,8 @@ jobs:
         export CROSS_COMPILE="$(pwd)/toolchains/google/bin/aarch64-linux-android-"
         export CLANG_TRIPLE=aarch64-linux-gnu-
 
-        export KBUILD_BUILD_USER="4.14.302-sus"
-        export KBUILD_BUILD_HOST="4.14.302-sus"
+        export KBUILD_BUILD_USER="4.14.296-nxt-sus"
+        export KBUILD_BUILD_HOST="4.14.296-nxt-sus"
         export BUILD_START=`date`
         export SELINUX_STATE="Enforcing"
         export IS_CI=true
