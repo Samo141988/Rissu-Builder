@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'F22-susfs-296'
+        default: 'main'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: "Samo141988/kernel_m32"
+        repository: "Samo141988/f22"
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
         fetch-depth: 1
