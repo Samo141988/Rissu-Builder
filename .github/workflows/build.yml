@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'f22-test'
+        default: 'SADXE1'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: "Samo141988/f22"
+        repository: "Samo141988/android_kernel_samsung_f22"
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
         fetch-depth: 1
