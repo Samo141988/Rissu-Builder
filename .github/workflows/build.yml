@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'main'
+        default: 'f22-test'
         required: true
       DEFCONFIG: 
         description: Defconfig
