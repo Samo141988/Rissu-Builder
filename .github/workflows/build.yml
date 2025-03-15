@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'ASB-296_SUSFS_NXT'
+        default: 'rc2'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: "Samo141988/kernel_m32"
+        repository: "Samo141988/m32"
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
         fetch-depth: 1
