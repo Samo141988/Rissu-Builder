@@ -8,7 +8,7 @@ on:
         required: true
       DEFCONFIG: 
         description: Defconfig
-        default: 'rsuntk_defconfig'
+        default: 'f22_defconfig'
         required: false
       LTO:
         description: 'Link Time Optimisation'
