@@ -4,21 +4,12 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'f22-rc2-susfs'
+        default: '13'
         required: true
       DEFCONFIG: 
         description: Defconfig
         default: 'rsuntk_defconfig'
         required: false
-      LTO:
-        description: 'Link Time Optimisation'
-        required: true
-        default: 'none'
-        type: choice
-        options:
-          - none
-          - thin
-          - full
       KSU:
         description: Add KernelSU support
         type: boolean
@@ -28,6 +19,12 @@ on:
       UPLOAD_LKM:
         description: Upload LKM
         type: boolean
+      LLVM:
+        description: LLVM=1
+        type: boolean
+      LLVM_IAS:
+        description: LLVM_IAS=1 (must enable LLVM=1!)
+        type: boolean
         
 jobs:
   build:
@@ -36,12 +33,12 @@ jobs:
     steps:
     - name: Get date
       id: rundate
-      run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
+      run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Damascus /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
     
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: "Samo141988/m32susfs"
+        repository: "Samo141988/kernel_samsung_m32"
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
         fetch-depth: 1
@@ -56,10 +53,8 @@ jobs:
       run: |
         mkdir toolchains
         cd toolchains
-        curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s clang-12
-        curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s androidcc-4.9
-        mv clang-12 clang
-        mv androidcc-4.9 google
+        curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s clang-12 && mv clang* clang
+        curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s androidcc-4.9 && mv androidcc* google
       working-directory: kernel_root
       
     - name: Build kernel
@@ -69,17 +64,23 @@ jobs:
         export CROSS_COMPILE="$(pwd)/toolchains/google/bin/aarch64-linux-android-"
         export CLANG_TRIPLE=aarch64-linux-gnu-
 
-        export KBUILD_BUILD_USER="4.14.356-nxt-sus"
-        export KBUILD_BUILD_HOST="4.14.356-nxt-sus"
+        export KBUILD_BUILD_USER="rsuntk"
+        export KBUILD_BUILD_HOST="rsuntkOrgs"
         export BUILD_START=`date`
         export SELINUX_STATE="Enforcing"
         export IS_CI=true
-        export LTO="${{ github.event.inputs.LTO }}"
         export DEFCONFIG="${{ github.event.inputs.DEFCONFIG }}"
-        export DEVICE="E225F"
-        export DEVICE_ID="f22"
-        export TARGET_PRODUCT="f22ins"
+        export DEVICE="M325FV"
+        export DEVICE_ID="M32"
+        export TARGET_PRODUCT="m32"
         export KERNELSU="${{ github.event.inputs.KSU }}"
+
+        if [[ "${{ github.event.inputs.LLVM }}" = "true" ]]; then
+          export LLVM=1
+          if [[ "${{ github.event.inputs.LLVM_IAS }}" = "true" ]]; then
+            export LLVM_IAS=1
+          fi
+        fi
         
         bash $(pwd)/build.sh kernel --jobs $(nproc --all) `echo $DEFCONFIG`
         
@@ -90,6 +91,12 @@ jobs:
         	KSU_VERSION="No KernelSU"
         fi
         echo "- KernelSU version: $KSU_VERSION"
+
+        if [ -e $(pwd)/include/linux/susfs.h ]; then
+          SUSFS_VERSION=$(cat ./include/linux/susfs.h | grep -E '^#define SUSFS_VERSION' | cut -d' ' -f3 | sed 's/"//g')
+        else
+          SUSFS_VERSION="Not available"
+        fi
         
         ## CREATE buildDetails.txt
         printf "Localversion: `./getutsrel`
@@ -97,7 +104,8 @@ jobs:
         Build date: `echo $BUILD_START`
         Defconfig: `echo $DEFCONFIG`
         KernelSU: `echo $KSU_VERSION`
-        LTO: thin
+        Susfs: `echo $SUSFS_VERSION`
+        LTO: none
         SELinux: `echo $SELINUX_STATE`
         " >> buildDetails.txt
         
