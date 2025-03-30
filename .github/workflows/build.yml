@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: '13'
+        default: 'Kernel-su-next-AB'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -90,7 +90,7 @@ jobs:
           fi
         fi
         
-        bash $(pwd)/build.sh kernel --jobs $(nproc --all) `echo $DEFCONFIG`
+        bash $(pwd)/build_kernel.sh kernel --jobs $(nproc --all) `echo $DEFCONFIG`
         
         if [[ "${{ github.event.inputs.KSU }}" = "true" ]]; then
         	KSU_REV_COUNT=$(cd KernelSU-Next && git rev-list --count HEAD)
