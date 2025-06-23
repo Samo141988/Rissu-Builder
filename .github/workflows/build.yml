@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'f22-rc2-susfs'
+        default: 'Susfs_add'
         required: true
       DEFCONFIG: 
         description: Defconfig
@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: "Samo141988/m32susfs"
+        repository: "Samo141988/kernel_samsung_f22_wmk_rebased"
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
         fetch-depth: 1
