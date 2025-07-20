@@ -36,7 +36,7 @@ jobs:
     steps:
     - name: Get date
       id: rundate
-      run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
+      run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
     
     - uses: actions/checkout@v4
       with:
@@ -69,8 +69,8 @@ jobs:
         export CROSS_COMPILE="$(pwd)/toolchains/google/bin/aarch64-linux-android-"
         export CLANG_TRIPLE=aarch64-linux-gnu-
 
-        export KBUILD_BUILD_USER="4.14.296-nxt-sus"
-        export KBUILD_BUILD_HOST="4.14.296-nxt-sus"
+        export KBUILD_BUILD_USER="4.14.356"
+        export KBUILD_BUILD_HOST="4.14.356"
         export BUILD_START=`date`
         export SELINUX_STATE="Enforcing"
         export IS_CI=true
