@@ -28,7 +28,6 @@ on:
       UPLOAD_LKM:
         description: Upload LKM
         type: boolean
-        
 jobs:
   build:
     runs-on: ubuntu-latest
