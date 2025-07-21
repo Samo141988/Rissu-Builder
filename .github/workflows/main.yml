@@ -38,18 +38,7 @@ jobs:
       id: rundate
       run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
 
-    - name: Maximize Build Space
-      uses: AdityaGarg8/remove-unwanted-software@v5
-      with:
-          remove-dotnet: 'true'          # Frees ~2 GB
-          remove-android: 'true'         # Frees ~9 GB
-          remove-haskell: 'true'         # Frees ~5.2 GB
-          remove-codeql: 'true'          # Frees ~5.4 GB
-          remove-docker-images: 'true'   # Frees ~3.2 GB
-          remove-large-packages: 'true'  # Frees ~3.1 GB
-          remove-swapfile: 'true'        # Frees ~4 GB
-          remove-cached-tools: 'false'   # Avoid unless confirmed safe
-          verbose: 'true'
+    
     - name: Install ccache
       run: sudo apt update && sudo apt install -y ccache
 
